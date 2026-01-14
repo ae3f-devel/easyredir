@@ -1,5 +1,5 @@
 cmake_minimum_required(	VERSION 3.10)
-project(easypipe	VERSION 0)
+project(easyredir	VERSION 0)
 
 # Set this source directory as the tree root for project.
 set(ae2f_ProjRoot ${CMAKE_CURRENT_SOURCE_DIR} CACHE STRING "Tree root for project")
@@ -19,9 +19,9 @@ if(NOT TARGET ae2f::CoreScript)
 	add_subdirectory(${ae2f_CoreScript_Wh} ${ae2f_submod}/ae2f/CoreScript)
 endif()
 
-if(NOT TARGET ae3f::easypipe)
-	add_executable(easypipe ./posix.c ./win.c ./main.c ./entry.h)
-	add_executable(ae3f::easypipe ALIAS	easypipe)
+if(NOT TARGET ae3f::easyredir)
+	add_executable(easyredir ./posix.c ./win.c ./main.c ./entry.h)
+	add_executable(ae3f::easyredir ALIAS	easyredir)
 
 	if(NOT EXISTS ${ae2f_submod}/ae2f/Core)
 		execute_process(
@@ -31,16 +31,16 @@ if(NOT TARGET ae3f::easypipe)
 	endif()
 
 	install(
-		TARGETS easypipe
-		EXPORT	easypipeTargets
+		TARGETS easyredir
+		EXPORT	easyredirTargets
 		RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
 		LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
 		ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
 		)
 
-	ae2f_CoreMkComponent(easypipe ae3f cfg.cmake.in)
-	ae2f_UltraErrWERROR(easypipe PRIVATE)
-	target_include_directories(easypipe PRIVATE 
+	ae2f_CoreMkComponent(easyredir ae3f cfg.cmake.in)
+	ae2f_UltraErrWERROR(easyredir PRIVATE)
+	target_include_directories(easyredir PRIVATE 
 		${ae2f_submod}/ae2f/Core/inc
 		${ae2f_submod}/ae2f/Sys/inc
 		)

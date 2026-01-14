@@ -5,11 +5,11 @@
 int main(int argc, const char** argv);
 int main(int argc, const char** argv) {
 	if(argc < 6) {
-		puts("easypipe stdin_file stdout_file stderr_file is_append programme-to-execute __VA_ARGS__|null");
+		puts("easyredir stdin_file stdout_file stderr_file is_append programme-to-execute __VA_ARGS__|null");
 		return 0;
 	}
 
-	return easypipe_entry(
+	return easyredir_entry(
 			argv[1]
 			, argv[2]
 			, argv[3]
