@@ -22,6 +22,7 @@ cmake --build build
 ```
 
 # Usage
-```
-easypipe stdin_file stdout_file stderr_file programme-to-execute __VA_ARGS__|null
+```sh
+easypipe stdin_file stdout_file stderr_file is_append programme-to-execute __VA_ARGS__|null
+# is_append must be integer.
 ```

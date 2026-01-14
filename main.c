@@ -5,7 +5,7 @@
 int main(int argc, const char** argv);
 int main(int argc, const char** argv) {
 	if(argc < 6) {
-		puts("easypipe stdin_file stdout_file stderr_file programme-to-execute __VA_ARGS__|null");
+		puts("easypipe stdin_file stdout_file stderr_file is_append programme-to-execute __VA_ARGS__|null");
 		return 0;
 	}
 
@@ -13,8 +13,8 @@ int main(int argc, const char** argv) {
 			argv[1]
 			, argv[2]
 			, argv[3]
-			, argv[4]
-			, atoi(argv[5])
+			, argv[5]
+			, atoi(argv[4])
 			, argc - 6
 			, argv + 6
 			);
