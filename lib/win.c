@@ -1,4 +1,4 @@
-#include "./entry.h"
+#include "./easyredir.h"
 
 #if (defined(_WIN32) && _WIN32)
 

@@ -1,3 +1,6 @@
+#ifndef easyredir_h
+#define easyredir_h
+
 #include <ae2f/Keys.h>
 
 /**
@@ -28,3 +31,5 @@ ae2f_decl int easyredir_entry(
 		const int c_is_append,
 		const int c_argc, const char** ae2f_restrict rd_argv
 		);
+
+#endif

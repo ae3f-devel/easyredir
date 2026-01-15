@@ -27,11 +27,11 @@ if(NOT TARGET ae3f::easyredir)
 	endif()
 
 	ae2f_CoreLibTentConfigCustom(
-		libeasyredir ${EASYREDIR_PREFIX} src ae3f cfg.cmake.in
-		src/posix.c src/win.c
+		libeasyredir ${EASYREDIR_PREFIX} lib ae3f cfg/lib.cmake.in
+		lib/posix.c lib/win.c
 		)
 
-	add_executable(easyredir src/posix.c src/win.c src/main.c src/entry.h)
+	add_executable(easyredir lib/win.c app/main.c lib/posix.c)
 	add_executable(ae3f::easyredir ALIAS	easyredir)
 
 	ae2f_CoreLibFetchX(ae2f Core main)
@@ -44,9 +44,10 @@ if(NOT TARGET ae3f::easyredir)
 		ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
 		)
 
-	ae2f_CoreMkComponent(easyredir ae3f cfg.cmake.in)
+	ae2f_CoreMkComponent(easyredir ae3f cfg/app.cmake.in)
 	ae2f_UltraErrWERROR(easyredir PRIVATE)
 
 	target_link_libraries(easyredir PRIVATE ae2f::Core)
 	target_link_libraries(ae3f-libeasyredir PUBLIC ae2f::Core)
+	target_include_directories(easyredir PRIVATE lib)
 endif()

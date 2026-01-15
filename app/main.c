@@ -1,4 +1,4 @@
-#include "./entry.h"
+#include <easyredir.h>
 #include <stdio.h>
 #include <stdlib.h>
 

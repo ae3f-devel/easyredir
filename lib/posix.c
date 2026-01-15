@@ -1,4 +1,4 @@
-#include "./entry.h"
+#include "./easyredir.h"
 
 #include <sys/mman.h>
 #include <sys/wait.h>
