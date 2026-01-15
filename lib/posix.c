@@ -14,7 +14,7 @@
 #include <fcntl.h>
 
 /** TODO: complete implementation */
-ae2f_impl int easyredir_entry(
+EASYREDIR_IMPL int easyredir_entry(
 		const char* ae2f_restrict const rd_path_istream,
 		const char* ae2f_restrict const rd_path_ostream,
 		const char* ae2f_restrict const rd_path_estream,

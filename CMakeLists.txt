@@ -22,9 +22,16 @@ endif()
 if(NOT TARGET ae3f::easyredir)
 	if(EASYREDIR_SHARED)
 		set(EASYREDIR_PREFIX SHARED)
+		set(EASYREDIR_SHARED 1)
 	else()
 		set(EASYREDIR_PREFIX STATIC)
+		set(EASYREDIR_SHARED 0)
 	endif()
+
+	configure_file(
+		${CMAKE_CURRENT_SOURCE_DIR}/lib/easyredir-link.h.in
+		${CMAKE_CURRENT_SOURCE_DIR}/lib/easyredir-link.h
+		)
 
 	ae2f_CoreLibTentConfigCustom(
 		libeasyredir ${EASYREDIR_PREFIX} lib ae3f cfg/lib.cmake.in

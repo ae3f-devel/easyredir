@@ -2,6 +2,15 @@
 #define easyredir_h
 
 #include <ae2f/Keys.h>
+#include "./easyredir-link.h"
+
+#if EASYREDIR_SHARED
+#define	EASYREDIR_DECL	ae2f_decl
+#define EASYREDIR_IMPL	ae2f_impl
+#else
+#define	EASYREDIR_DECL
+#define EASYREDIR_IMPL
+#endif
 
 /**
  * @fn		easypipe_entry
@@ -23,7 +32,7 @@
  * @param	c_argc		argument count **excluding** programme name
  * @param	rd_argv		argumetns
  * */
-ae2f_decl int easyredir_entry(
+EASYREDIR_DECL int easyredir_entry(
 		const char* ae2f_restrict const rd_path_istream,
 		const char* ae2f_restrict const rd_path_ostream,
 		const char* ae2f_restrict const rd_path_estream,
