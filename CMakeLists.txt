@@ -29,8 +29,8 @@ if(NOT TARGET ae3f::easyredir)
 	endif()
 
 	configure_file(
-		${CMAKE_CURRENT_SOURCE_DIR}/lib/easyredir-link.h.in
-		${CMAKE_CURRENT_SOURCE_DIR}/lib/easyredir-link.h
+		${CMAKE_CURRENT_SOURCE_DIR}/lib/easyredir/link.h.in
+		${CMAKE_CURRENT_SOURCE_DIR}/lib/easyredir/link.h
 		)
 
 	ae2f_CoreLibTentConfigCustom(
