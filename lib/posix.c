@@ -1,17 +1,17 @@
 #include "./easyredir.h"
 
+#if !(defined(_WIN32) && _WIN32)
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
 #include <sys/mman.h>
 #include <sys/wait.h>
 
 #include <unistd.h>
 #include <assert.h>
 #include <fcntl.h>
-
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-
-#if !(defined(_WIN32) && _WIN32)
 
 /** TODO: complete implementation */
 ae2f_impl int easyredir_entry(
