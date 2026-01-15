@@ -2,7 +2,7 @@
 #define easyredir_h
 
 #include <ae2f/Keys.h>
-#include "./easyredir/link.h"
+#include "./easyredir/.link.h"
 
 #if EASYREDIR_SHARED
 #define	EASYREDIR_DECL	ae2f_decl
