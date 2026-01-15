@@ -3,7 +3,7 @@
 #if (defined(_WIN32) && _WIN32)
 
 /** TODO: complete implementation */
-int easypipe_entry(
+ae2f_impl int easypipe_entry(
 		const char* ae2f_restrict const rd_path_istream,
 		const char* ae2f_restrict const rd_path_ostream,
 		const char* ae2f_restrict const rd_path_estream,

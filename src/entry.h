@@ -20,7 +20,7 @@
  * @param	c_argc		argument count **excluding** programme name
  * @param	rd_argv		argumetns
  * */
-int easyredir_entry(
+ae2f_decl int easyredir_entry(
 		const char* ae2f_restrict const rd_path_istream,
 		const char* ae2f_restrict const rd_path_ostream,
 		const char* ae2f_restrict const rd_path_estream,

@@ -20,15 +20,21 @@ if(NOT TARGET ae2f::CoreScript)
 endif()
 
 if(NOT TARGET ae3f::easyredir)
-	add_executable(easyredir ./posix.c ./win.c ./main.c ./entry.h)
+	if(EASYREDIR_SHARED)
+		set(EASYREDIR_PREFIX SHARED)
+	else()
+		set(EASYREDIR_PREFIX STATIC)
+	endif()
+
+	ae2f_CoreLibTentConfigCustom(
+		libeasyredir ${EASYREDIR_PREFIX} src ae3f cfg.cmake.in
+		src/posix.c src/win.c
+		)
+
+	add_executable(easyredir src/posix.c src/win.c src/main.c src/entry.h)
 	add_executable(ae3f::easyredir ALIAS	easyredir)
 
-	if(NOT EXISTS ${ae2f_submod}/ae2f/Core)
-		execute_process(
-			COMMAND git clone https://codeberg.org/ae2f/Core
-			${ae2f_submod}/ae2f/Core
-			)
-	endif()
+	ae2f_CoreLibFetchX(ae2f Core main)
 
 	install(
 		TARGETS easyredir
@@ -40,8 +46,7 @@ if(NOT TARGET ae3f::easyredir)
 
 	ae2f_CoreMkComponent(easyredir ae3f cfg.cmake.in)
 	ae2f_UltraErrWERROR(easyredir PRIVATE)
-	target_include_directories(easyredir PRIVATE 
-		${ae2f_submod}/ae2f/Core/inc
-		${ae2f_submod}/ae2f/Sys/inc
-		)
+
+	target_link_libraries(easyredir PRIVATE ae2f::Core)
+	target_link_libraries(ae3f-libeasyredir PUBLIC ae2f::Core)
 endif()
