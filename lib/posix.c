@@ -110,9 +110,6 @@ EASYREDIR_IMPL int easyredir_entry2(
 			chdir(rd_workdir);
 		}
 
-		puts(RD_ARGV[0]);
-		puts(rd_process);
-
 #if 0
 		else {
 			long MAX_PATH = pathconf("/", _PC_PATH_MAX);
