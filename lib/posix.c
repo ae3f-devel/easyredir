@@ -18,8 +18,8 @@ EASYREDIR_IMPL int easyredir_entry2(
 		const char* ae2f_restrict const rd_path_istream,
 		const char* ae2f_restrict const rd_path_ostream,
 		const char* ae2f_restrict const rd_path_estream,
-		const char* ae2f_restrict const rd_process,
 		const char* ae2f_restrict const rd_workdir,
+		const char* ae2f_restrict const rd_process,
 		const int c_is_append,
 		const int c_argc, const char** ae2f_restrict rd_argv
 		)
@@ -38,6 +38,7 @@ EASYREDIR_IMPL int easyredir_entry2(
 	assert(rd_path_ostream);
 	assert(rd_path_estream);
 	assert(rd_process);
+	assert(*rd_process);
 	assert(rd_workdir);
 
 	ae2f_unexpected_but_if(RD_ARGV == 0) {
@@ -55,7 +56,8 @@ EASYREDIR_IMPL int easyredir_entry2(
 	}
 
 	if(rd_path_ostream[0]) {
-		OSTREAM = open(rd_path_ostream, O_CREAT | O_WRONLY | (c_is_append ? O_APPEND : 0)
+		OSTREAM = open(rd_path_ostream, O_CREAT | O_WRONLY 
+				| (c_is_append ? O_APPEND : 0)
 				, 0666);
 
 		ae2f_unexpected_but_if(OSTREAM == -1) {
@@ -65,7 +67,8 @@ EASYREDIR_IMPL int easyredir_entry2(
 	}
 
 	if(rd_path_estream[0]) {
-		ESTREAM = open(rd_path_estream, O_CREAT | O_WRONLY | (c_is_append ? O_APPEND : 0)
+		ESTREAM = open(rd_path_estream, O_CREAT | O_WRONLY 
+				| (c_is_append ? O_APPEND : 0)
 				, 0666);
 
 		ae2f_unexpected_but_if(ESTREAM == -1) {
@@ -81,33 +84,37 @@ EASYREDIR_IMPL int easyredir_entry2(
 		jmpreturn(-1);
 	}
 
+
 	unless(PID) {
 		/** this is child */
 		if(ISTREAM != -1) {
 			dup2(ISTREAM, STDIN_FILENO);
-			close(ISTREAM);
-			ISTREAM = -1;
 		} 
 
 		if(OSTREAM != -1) {
 			dup2(OSTREAM, STDOUT_FILENO);
-			close(OSTREAM);
-			OSTREAM = -1;
 		} 
 
 		if(ESTREAM != -1) {
 			dup2(ESTREAM, STDERR_FILENO);
-			close(ESTREAM);
-			ESTREAM = -1;
 		}
 
-		memcpy(RD_ARGV + 1, rd_argv, (size_t)((size_t)(c_argc) * (size_t)sizeof(void*)));
+		memcpy(RD_ARGV + 1
+				, rd_argv
+				, (size_t)((size_t)(c_argc) * (size_t)sizeof(void*))
+				);
 		RD_ARGV[0] = (char*)rd_process;
 		RD_ARGV[c_argc + 1] = 0;
 
 		if(*rd_workdir) {
 			chdir(rd_workdir);
-		} else {
+		}
+
+		puts(RD_ARGV[0]);
+		puts(rd_process);
+
+#if 0
+		else {
 			long MAX_PATH = pathconf("/", _PC_PATH_MAX);
 			char*	PWD = 0;
 
@@ -126,6 +133,7 @@ EASYREDIR_IMPL int easyredir_entry2(
 
 			free(PWD);
 		}
+#endif
 
 		execvp(rd_process, RD_ARGV);
 		exit(127);
