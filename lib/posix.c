@@ -14,11 +14,12 @@
 #include <fcntl.h>
 
 /** TODO: complete implementation */
-EASYREDIR_IMPL int easyredir_entry(
+EASYREDIR_IMPL int easyredir_entry2(
 		const char* ae2f_restrict const rd_path_istream,
 		const char* ae2f_restrict const rd_path_ostream,
 		const char* ae2f_restrict const rd_path_estream,
 		const char* ae2f_restrict const rd_process,
+		const char* ae2f_restrict const rd_workdir,
 		const int c_is_append,
 		const int c_argc, const char** ae2f_restrict rd_argv
 		)
@@ -32,6 +33,12 @@ EASYREDIR_IMPL int easyredir_entry(
 	char** ae2f_restrict const RD_ARGV = 
 		malloc((size_t)((size_t)(c_argc + 2) * (size_t)sizeof(void*)));
 #define jmpreturn(a)	{ RET = (a); goto LBL_RET; }
+
+	assert(rd_path_istream);
+	assert(rd_path_ostream);
+	assert(rd_path_estream);
+	assert(rd_process);
+	assert(rd_workdir);
 
 	ae2f_unexpected_but_if(RD_ARGV == 0) {
 		assert(0 && "mmap");
@@ -79,22 +86,46 @@ EASYREDIR_IMPL int easyredir_entry(
 		if(ISTREAM != -1) {
 			dup2(ISTREAM, STDIN_FILENO);
 			close(ISTREAM);
+			ISTREAM = -1;
 		} 
 
 		if(OSTREAM != -1) {
 			dup2(OSTREAM, STDOUT_FILENO);
 			close(OSTREAM);
+			OSTREAM = -1;
 		} 
 
 		if(ESTREAM != -1) {
 			dup2(ESTREAM, STDERR_FILENO);
 			close(ESTREAM);
+			ESTREAM = -1;
 		}
 
 		memcpy(RD_ARGV + 1, rd_argv, (size_t)((size_t)(c_argc) * (size_t)sizeof(void*)));
 		RD_ARGV[0] = (char*)rd_process;
 		RD_ARGV[c_argc + 1] = 0;
 
+		if(*rd_workdir) {
+			chdir(rd_workdir);
+		} else {
+			long MAX_PATH = pathconf("/", _PC_PATH_MAX);
+			char*	PWD = 0;
+
+			ae2f_unexpected_but_if(MAX_PATH <= 0)
+				jmpreturn(-1);
+
+			ae2f_expected_but_else(PWD = malloc((size_t)MAX_PATH))
+				jmpreturn(-1);
+
+			ae2f_expected_but_else(getcwd(PWD, (size_t)MAX_PATH)) {
+				free(PWD);
+				jmpreturn(-1);
+			}
+
+			chdir(PWD);
+
+			free(PWD);
+		}
 
 		execvp(rd_process, RD_ARGV);
 		exit(127);

@@ -35,10 +35,10 @@ if(NOT TARGET ae3f::easyredir)
 
 	ae2f_CoreLibTentConfigCustom(
 		libeasyredir ${EASYREDIR_PREFIX} lib ae3f cfg/lib.cmake.in
-		lib/posix.c lib/win.c
+		lib/posix.c lib/win.c lib/entry.c
 		)
 
-	add_executable(easyredir lib/win.c app/main.c lib/posix.c)
+	add_executable(easyredir app/main.c lib/posix.c lib/win.c lib/entry.c)
 	add_executable(ae3f::easyredir ALIAS	easyredir)
 
 	ae2f_CoreLibFetchX(ae2f Core main)
