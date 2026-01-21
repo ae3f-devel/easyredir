@@ -20,6 +20,7 @@ EASYREDIR_IMPL int easyredir_entry2(
 	(void)c_is_append;
 	(void)c_argc;
 	(void)rd_argv;
+	(void)rd_workdir;
 
 	return 0;
 }
