@@ -13,7 +13,6 @@
 #include <assert.h>
 #include <fcntl.h>
 
-/** TODO: complete implementation */
 EASYREDIR_IMPL int easyredir_entry2(
 		const char* ae2f_restrict const rd_path_istream,
 		const char* ae2f_restrict const rd_path_ostream,
@@ -109,28 +108,6 @@ EASYREDIR_IMPL int easyredir_entry2(
 		if(*rd_workdir) {
 			chdir(rd_workdir);
 		}
-
-#if 0
-		else {
-			long MAX_PATH = pathconf("/", _PC_PATH_MAX);
-			char*	PWD = 0;
-
-			ae2f_unexpected_but_if(MAX_PATH <= 0)
-				jmpreturn(-1);
-
-			ae2f_expected_but_else(PWD = malloc((size_t)MAX_PATH))
-				jmpreturn(-1);
-
-			ae2f_expected_but_else(getcwd(PWD, (size_t)MAX_PATH)) {
-				free(PWD);
-				jmpreturn(-1);
-			}
-
-			chdir(PWD);
-
-			free(PWD);
-		}
-#endif
 
 		execvp(rd_process, RD_ARGV);
 		exit(127);
