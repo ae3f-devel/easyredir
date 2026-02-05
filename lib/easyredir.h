@@ -13,8 +13,8 @@
 #endif
 
 /**
- * @fn		easypipe_entry
- * @brief	entry for easy pipe
+ * @fn		easyredir_entry
+ * @brief	entry for easyredir_entry2
  * @see		implementation has moved to `easyredir_entry2`.
  * */
 ae2f_extern EASYREDIR_DECL int easyredir_entry(
@@ -27,8 +27,8 @@ ae2f_extern EASYREDIR_DECL int easyredir_entry(
 		);
 
 /**
- * @fn		easypipe_entry
- * @brief	entry for easy pipe
+ * @fn		easyredir_entry2
+ * @brief	entry for easy subprocess 
  * @param	rd_path_istream	path to stdin redirection
  * 		> when blank ("") redirection should not be happening
  *
