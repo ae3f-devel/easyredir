@@ -94,6 +94,10 @@ EASYREDIR_IMPL int easyredir_entry2(
         DWORD creationDisp = 0;
         
         if (c_is_append) {
+            /* * OPEN_ALWAYS: Opens the file if it exists, or creates a new one if it doesn't.
+             * This prevents crashes when the file is missing and preserves existing 
+             * content for append mode (unlike CREATE_ALWAYS which truncates).
+             */
             creationDisp = OPEN_ALWAYS;
         } else {
             creationDisp = CREATE_ALWAYS;
