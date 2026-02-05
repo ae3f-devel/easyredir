@@ -7,6 +7,7 @@
 #include <string.h>
 #include <windows.h>
 #include <assert.h>
+#include <ae2f/cc.h>
 
 #define jmpreturn(a) { RET = (a); goto LBL_RET; }
 
@@ -14,6 +15,7 @@
 #define unless(x) if(!(x))
 #endif
 
+/** TODO: complete implementation */
 EASYREDIR_IMPL int easyredir_entry2(
     const char* ae2f_restrict const rd_path_istream,
     const char* ae2f_restrict const rd_path_ostream,
@@ -25,13 +27,13 @@ EASYREDIR_IMPL int easyredir_entry2(
 )
 {
     int RET = 0;
-    DWORD exitCode = 0;
+    DWORD PROC_RET = 0;
     
-    HANDLE hIn = INVALID_HANDLE_VALUE;
-    HANDLE hOut = INVALID_HANDLE_VALUE;
-    HANDLE hErr = INVALID_HANDLE_VALUE;
+    HANDLE ISTREAM = INVALID_HANDLE_VALUE;
+    HANDLE OSTREAM = INVALID_HANDLE_VALUE;
+    HANDLE ESTREAM = INVALID_HANDLE_VALUE;
 
-    char* cmdLine = NULL;
+    char* ae2f_restrict cmdLine = NULL;
     size_t cmdLen = 0;
     int i;
 
@@ -65,7 +67,10 @@ EASYREDIR_IMPL int easyredir_entry2(
         jmpreturn(-1);
     }
 
-    sprintf(cmdLine, "\"%s\"", rd_process);
+    strcpy(cmdLine, "\"");
+    strcat(cmdLine, rd_process);
+    strcat(cmdLine, "\"");
+
     for (i = 0; i < c_argc; ++i) {
         strcat(cmdLine, " \"");
         strcat(cmdLine, rd_argv[i]);
@@ -73,57 +78,70 @@ EASYREDIR_IMPL int easyredir_entry2(
     }
 
     if (rd_path_istream[0]) {
-        hIn = CreateFileA(rd_path_istream, GENERIC_READ, FILE_SHARE_READ, 
+        ISTREAM= CreateFileA(rd_path_istream, GENERIC_READ, FILE_SHARE_READ, 
                           &sa, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
         
-        ae2f_unexpected_but_if(hIn == INVALID_HANDLE_VALUE) {
+        ae2f_unexpected_but_if(ISTREAM == INVALID_HANDLE_VALUE) {
             assert(0 && "ISTREAM open has failed.");
             jmpreturn(-1);
         }
-        si.hStdInput = hIn;
+        si.hStdInput = ISTREAM;
     } else {
         si.hStdInput = GetStdHandle(STD_INPUT_HANDLE);
     }
 
     if (rd_path_ostream[0]) {
-        DWORD creationDisp = c_is_append ? OPEN_ALWAYS : CREATE_ALWAYS;
-        hOut = CreateFileA(rd_path_ostream, GENERIC_WRITE, FILE_SHARE_READ, 
+        DWORD creationDisp = 0;
+        
+        if (c_is_append) {
+            creationDisp = OPEN_ALWAYS;
+        } else {
+            creationDisp = CREATE_ALWAYS;
+        }
+
+        OSTREAM = CreateFileA(rd_path_ostream, GENERIC_WRITE, FILE_SHARE_READ, 
                            &sa, creationDisp, FILE_ATTRIBUTE_NORMAL, NULL);
 
-        ae2f_unexpected_but_if(hOut == INVALID_HANDLE_VALUE) {
+        ae2f_unexpected_but_if(OSTREAM == INVALID_HANDLE_VALUE) {
             assert(0 && "OSTREAM open has failed.");
             jmpreturn(-1);
         }
 
         if (c_is_append) {
-            SetFilePointer(hOut, 0, NULL, FILE_END);
+            SetFilePointer(OSTREAM, 0, NULL, FILE_END);
         }
-        si.hStdOutput = hOut;
+        si.hStdOutput = OSTREAM;
     } else {
         si.hStdOutput = GetStdHandle(STD_OUTPUT_HANDLE);
     }
 
     if (rd_path_estream[0]) {
-        DWORD creationDisp = c_is_append ? OPEN_ALWAYS : CREATE_ALWAYS;
-        hErr = CreateFileA(rd_path_estream, GENERIC_WRITE, FILE_SHARE_READ, 
-                           &sa, creationDisp, FILE_ATTRIBUTE_NORMAL, NULL);
+        DWORD creationDisp = 0;
+        if (c_is_append) {
+            creationDisp = OPEN_ALWAYS;
+        } else {
+            creationDisp = CREATE_ALWAYS;
+        }
 
-        ae2f_unexpected_but_if(hErr == INVALID_HANDLE_VALUE) {
+        ESTREAM = CreateFileA(rd_path_estream, GENERIC_WRITE, FILE_SHARE_READ, 
+                        &sa, creationDisp, FILE_ATTRIBUTE_NORMAL, NULL);
+
+        ae2f_unexpected_but_if(ESTREAM == INVALID_HANDLE_VALUE) {
             assert(0 && "ESTREAM open has failed.");
             jmpreturn(-1);
-        }
+        } 
 
         if (c_is_append) {
-            SetFilePointer(hErr, 0, NULL, FILE_END);
+            SetFilePointer(ESTREAM, 0, NULL, FILE_END);
         }
-        si.hStdError = hErr;
+        si.hStdError = ESTREAM;
     } else {
         si.hStdError = GetStdHandle(STD_ERROR_HANDLE);
     }
 
     si.dwFlags |= STARTF_USESTDHANDLES;
 
-    if (!CreateProcessA(
+    ae2f_expected_but_else (CreateProcessA(
             NULL, 
             cmdLine, 
             NULL, 
@@ -141,10 +159,10 @@ EASYREDIR_IMPL int easyredir_entry2(
 
     WaitForSingleObject(pi.hProcess, INFINITE);
 
-    if (!GetExitCodeProcess(pi.hProcess, &exitCode)) {
+    ae2f_expected_but_else (GetExitCodeProcess(pi.hProcess, &PROC_RET)) {
         RET = -1;
     } else {
-        RET = (int)exitCode;
+        RET = (int)PROC_RET;
     }
 
     CloseHandle(pi.hProcess);
@@ -153,9 +171,9 @@ EASYREDIR_IMPL int easyredir_entry2(
 LBL_RET:
     if (cmdLine) free(cmdLine);
 
-    unless(hIn == INVALID_HANDLE_VALUE) CloseHandle(hIn);
-    unless(hOut == INVALID_HANDLE_VALUE) CloseHandle(hOut);
-    unless(hErr == INVALID_HANDLE_VALUE) CloseHandle(hErr);
+    unless(ISTREAM == INVALID_HANDLE_VALUE) CloseHandle(ISTREAM);
+    unless(OSTREAM == INVALID_HANDLE_VALUE) CloseHandle(OSTREAM);
+    unless(ESTREAM == INVALID_HANDLE_VALUE) CloseHandle(ESTREAM);
 
     return RET;
 }
