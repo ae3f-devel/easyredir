@@ -63,6 +63,11 @@ EASYREDIR_IMPL int easyredir_entry2(
 			assert(0 && "OSTREAM open has failed.");
 			jmpreturn(-1);
 		}
+
+		unless(c_is_append) {
+			if(ftruncate(OSTREAM, 0) == -1)
+				assert(0 && "OSTREAM ftruncate has failed.");
+		}
 	}
 
 	if(rd_path_estream[0]) {
@@ -73,6 +78,11 @@ EASYREDIR_IMPL int easyredir_entry2(
 		ae2f_unexpected_but_if(ESTREAM == -1) {
 			assert(0 && "ESTREAM open has failed.");
 			jmpreturn(-1);
+		}
+
+		unless(c_is_append) {
+			if(ftruncate(ESTREAM, 0) == -1)
+				assert(0 && "ESTREAM ftruncate has failed.");
 		}
 	}
 
