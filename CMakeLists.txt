@@ -1,5 +1,5 @@
 cmake_minimum_required(	VERSION 3.10)
-project(easyredir	VERSION 0)
+project(easyredir	VERSION 0 LANGUAGES C)
 
 # Set this source directory as the tree root for project.
 set(ae2f_ProjRoot ${CMAKE_CURRENT_SOURCE_DIR} CACHE STRING "Tree root for project")
