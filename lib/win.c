@@ -127,7 +127,7 @@ EASYREDIR_IMPL int easyredir_entry2(
             creationDisp = CREATE_ALWAYS;
         }
 
-        ESTREAM = CreateFileA(rd_path_estream, GENERIC_WRITE, FILE_SHARE_READ, 
+        ESTREAM = CreateFileA(rd_path_estream, FILE_SHARE_WRITE, FILE_SHARE_READ, 
                         &sa, creationDisp, FILE_ATTRIBUTE_NORMAL, NULL);
 
         ae2f_unexpected_but_if(ESTREAM == INVALID_HANDLE_VALUE) {
