@@ -78,8 +78,9 @@ EASYREDIR_IMPL int easyredir_entry2(
     }
 
     if (rd_path_istream[0]) {
-        ISTREAM= CreateFileA(rd_path_istream, FILE_SHARE_WRITE, FILE_SHARE_READ, 
-                          &sa, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
+        ISTREAM= CreateFileA(rd_path_istream, GENERIC_READ | GENERIC_WRITE
+			, FILE_SHARE_READ | FILE_SHARE_WRITE
+                        , &sa, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
         
         ae2f_unexpected_but_if(ISTREAM == INVALID_HANDLE_VALUE) {
             assert(0 && "ISTREAM open has failed.");
@@ -103,8 +104,9 @@ EASYREDIR_IMPL int easyredir_entry2(
             creationDisp = CREATE_ALWAYS;
         }
 
-        OSTREAM = CreateFileA(rd_path_ostream, FILE_SHARE_WRITE, FILE_SHARE_READ, 
-                           &sa, creationDisp, FILE_ATTRIBUTE_NORMAL, NULL);
+        OSTREAM = CreateFileA(rd_path_ostream, GENERIC_READ | GENERIC_WRITE
+			, FILE_SHARE_READ | FILE_SHARE_WRITE
+                        , &sa, creationDisp, FILE_ATTRIBUTE_NORMAL, NULL);
 
         ae2f_unexpected_but_if(OSTREAM == INVALID_HANDLE_VALUE) {
             assert(0 && "OSTREAM open has failed.");
@@ -127,8 +129,10 @@ EASYREDIR_IMPL int easyredir_entry2(
             creationDisp = CREATE_ALWAYS;
         }
 
-        ESTREAM = CreateFileA(rd_path_estream, FILE_SHARE_WRITE, FILE_SHARE_READ, 
-                        &sa, creationDisp, FILE_ATTRIBUTE_NORMAL, NULL);
+        ESTREAM = CreateFileA(rd_path_estream
+			, GENERIC_READ | GENERIC_WRITE
+			, FILE_SHARE_READ | FILE_SHARE_WRITE
+			, &sa, creationDisp, FILE_ATTRIBUTE_NORMAL, NULL);
 
         ae2f_unexpected_but_if(ESTREAM == INVALID_HANDLE_VALUE) {
             assert(0 && "ESTREAM open has failed.");
