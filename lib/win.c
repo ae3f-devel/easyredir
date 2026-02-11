@@ -78,7 +78,7 @@ EASYREDIR_IMPL int easyredir_entry2(
     }
 
     if (rd_path_istream[0]) {
-        ISTREAM= CreateFileA(rd_path_istream, GENERIC_READ | GENERIC_WRITE
+        ISTREAM= CreateFileA(rd_path_istream, GENERIC_READ
 			, FILE_SHARE_READ | FILE_SHARE_WRITE
                         , &sa, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
         
@@ -104,7 +104,7 @@ EASYREDIR_IMPL int easyredir_entry2(
             creationDisp = CREATE_ALWAYS;
         }
 
-        OSTREAM = CreateFileA(rd_path_ostream, GENERIC_READ | GENERIC_WRITE
+        OSTREAM = CreateFileA(rd_path_ostream, GENERIC_WRITE
 			, FILE_SHARE_READ | FILE_SHARE_WRITE
                         , &sa, creationDisp, FILE_ATTRIBUTE_NORMAL, NULL);
 
@@ -130,7 +130,7 @@ EASYREDIR_IMPL int easyredir_entry2(
         }
 
         ESTREAM = CreateFileA(rd_path_estream
-			, GENERIC_READ | GENERIC_WRITE
+			, GENERIC_WRITE
 			, FILE_SHARE_READ | FILE_SHARE_WRITE
 			, &sa, creationDisp, FILE_ATTRIBUTE_NORMAL, NULL);
 
