@@ -116,7 +116,8 @@ EASYREDIR_IMPL int easyredir_entry2(
 		RD_ARGV[c_argc + 1] = 0;
 
 		if(*rd_workdir) {
-			(void)chdir(rd_workdir);
+			int CHDIR_RET = chdir(rd_workdir);
+			if(CHDIR_RET) jmpreturn(-1);
 		}
 
 		execvp(rd_process, RD_ARGV);
