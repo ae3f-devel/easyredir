@@ -1,3 +1,5 @@
+#define _CRT_SECURE_NO_WARNINGS	1
+
 #include "./easyredir.h"
 
 #if (defined(_WIN32) && _WIN32)
