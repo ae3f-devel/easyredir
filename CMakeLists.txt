@@ -17,7 +17,7 @@ endif()
 
 # add subdirectory
 if(NOT TARGET ae2f::CoreScript)
-	add_subdirectory(${ae2f_CoreScript_Wh} ${ae2f_submod}/ae2f/CoreScript)
+	add_subdirectory(${ae2f_CoreScript_Wh} ${ae2f_BinRoot}/${ae2f_submod}/ae2f/CoreScript)
 endif()
 
 if(NOT TARGET ae3f::easyredir)
